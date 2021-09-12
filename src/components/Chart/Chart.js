@@ -12,32 +12,33 @@ const Chart = () => {
       setDailyData(await fetchDailyData());
     };
     fetchAPI();
-  },[]);
-  console.log("dailyData", dailyData.length);
-  const lineChart = dailyData.length ? (
-    <Line
-      data={{
-        label: dailyData.map(({ date }) => date),
-        datasets: [
-          {
-            data: dailyData.map(({ confirmed }) => confirmed),
-            label: "Infected",
-            borderColor: "#333ff",
-            fill: true,
-          },
-          {
-            data: dailyData.map(({ deaths }) => deaths),
-            label: "Infected",
-            borderColor: "red",
-            backgroundColor: "rgba(255, 0,0 .5)",
-            fill: true,
-          },
-        ],
-      }}
-    />
-  ) : null;
+  }, []);
+  // console.log("dailyData", dailyData.length);
 
-  return <div className={styles.container}>{lineChart}</div>;
+  const data = {
+    labels: dailyData.map(({ date }) => date),
+    datasets: [
+      {
+        data: dailyData.map(({ confirmed }) => confirmed),
+        label: "Infected",
+        borderColor: "#333ff",
+        backgroundColor: "rgba(0, 0, 0, .2)",
+        fill: true,
+      },
+      {
+        data: dailyData.map(({ deaths }) => deaths),
+        label: "Deaths",
+        borderColor: "red",
+        backgroundColor: "rgba(240, 52, 52, 1)",
+        fill: true,
+      },
+    ],
+  };
+  return (
+    <div className={styles.container}>
+      {dailyData.length ? <Line data={data} /> : <div>Loading....</div>}
+    </div>
+  );
 };
 
 export default Chart;
